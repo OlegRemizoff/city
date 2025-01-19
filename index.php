@@ -3,27 +3,16 @@
 require_once './classes/Db.php';
 require_once './functions.php';
 
+$data = getPaginations();
+$city = $data['data'];
+dd($city);
 
-$db_config = [
-    'host' => "localhost",
-    'dbname' => 'world',
-    'username' => 'root',
-    'password' => '',
-    'charset' => 'utf8',
-    'options' => [
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // ассоциативный массив
-    ]
-];
+for ($i = 1; $i <= $data['pages_cnt']; $i++) {
+    echo "<a href='?page={$i}' style='text-decoration: none'> {$i}</a>";
+}
 
 
-$db = Db::getInstance()->getConnection($db_config);
-
-$cities = $db->query("SELECT * FROM city WHERE id = ? OR name = ?", ['1', 'Kabul'])->findOrFail();
-dd($cities);
-
-
-
-
+die;
 ?>
 
 
