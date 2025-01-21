@@ -1,22 +1,37 @@
 <?php 
 
 require_once './classes/Db.php';
+require_once './classes/Pagination.php';
 require_once './functions.php';
 
-$data = getPaginations();
-$city = $data['data'];
-dd($city);
+//city?page=2
 
-for ($i = 1; $i <= $data['pages_cnt']; $i++) {
-    echo "<a href='?page={$i}' style='text-decoration: none'> {$i}</a>";
-}
+$db_config = [
+    'host' => "localhost",
+    'dbname' => 'world',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8',
+    'options' => [
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // ассоциативный массив
+    ]
+];
 
+// Подключение к БД
+$db = Db::getInstance()->getConnection($db_config);
 
-die;
+$page = $_GET['page'] ?? 1;
+$per_page = 3;
+$total = $db->query("SELECT COUNT(*) AS count FROM city")->getColumn();
+$pagination = new Pagination((int)$page, $per_page, $total);
+$start = $pagination->getStart();
+
+$cities = $db->query("SELECT * FROM city LIMIT {$start}, {$per_page}")->findAll();
+dd($cities);
+
+echo $pagination;
+
 ?>
-
-
-
 
 
 <!DOCTYPE html>
