@@ -34,11 +34,24 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <form method="post" id="addCityForm">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="addName" class="form-label">Name</label>
+                                <input type="text" name="name" class="form-control" id="addName" placeholder="City name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="addPopulation" class="form-label">Population</label>
+                                <input type="number" name="population" class="form-control" id="addPopulation" placeholder="Population">
+
+                                <input type="hidden" name="addCity">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="btn-add-submit">Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -67,6 +80,7 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/main.js"></script>
 </body>
 

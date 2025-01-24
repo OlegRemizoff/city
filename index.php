@@ -9,9 +9,9 @@ $config = require_once 'config.php';
 $db = Db::getInstance()->getConnection($config['db']);
 
 $page = $_GET['page'] ?? 1;
-$total = $db->query("SELECT COUNT(*) AS count FROM city")->getColumn();
+$total = $db->query("SELECT COUNT(*) AS count FROM city")->findColumn();
 $pagination = new Pagination((int)$page, $config['per_page'], $total);
-$start = $pagination->getStart();
+$start = $pagination->get_start();
 
 $cities = $db->query("SELECT * FROM city LIMIT {$start}, {$config['per_page']}")->findAll();
 

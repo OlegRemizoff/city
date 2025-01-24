@@ -1,21 +1,23 @@
 <?php
 
-
 class Db
 {
 
-    private static ?self $instance = null;
-    private $connection;   
+    private static $instance = null;
+    private $connection;
     private PDOStatement $stmt;
 
-    // предотвращения создания новых экземпляров
     private function __construct()
     {
     }
 
-    // Клонирование запрещено
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
+    public function __wakeup()
+    {
+    }
 
     public static function getInstance()
     {
@@ -27,24 +29,33 @@ class Db
 
     public function getConnection(array $db_config)
     {
+        $dsn = "mysql:host={$db_config['host']};dbname={$db_config['dbname']};charset={$db_config['charset']}";
 
-        $dsn = "mysql:host={$db_config['host']};dbname={$db_config['dbname']};charset={$db_config['charset']};";
-        
         try {
             $this->connection = new PDO($dsn, $db_config['username'], $db_config['password'], $db_config['options']);
+            return $this;
         } catch (PDOException $e) {
-            die("Ошибка подключения к базе данных: " . $e->getMessage());
+            echo "DB Error: {$e->getMessage()}";
+            die;
+        }
+    }
+
+    public function query($query, $params = [])
+    {
+        $this->stmt = $this->connection->prepare($query);
+        try {
+            $this->stmt->execute($params);
+        } catch (PDOException $e) {
+            return false;
+            // echo "DB Error: {$e->getMessage()}";
+            // die;
         }
         return $this;
     }
 
-
-
-    public function query($query, $params = [])//: PDOStatement
+    public function find()
     {
-        $this->stmt = $this->connection->prepare($query);
-        $this->stmt->execute($params);
-        return $this;
+        return $this->stmt->fetch();
     }
 
     public function findAll()
@@ -52,24 +63,9 @@ class Db
         return $this->stmt->fetchAll();
     }
 
-    public function find()
+    public function findColumn()
     {
-        return $this->stmt->fetch();;
-    }
-
-    public function findOrFail()
-    {
-        $res = $this->find();
-        if (!$res) {
-            die();
-        }
-        return $res;
-
-    }
-
-    public function getColumn() {
         return $this->stmt->fetchColumn();
     }
 
-    
 }
