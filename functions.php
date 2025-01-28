@@ -11,6 +11,13 @@ function dd($data, $die = false)
 }
 
 
+function search_cities(string $search): array 
+{
+    global $db;
+    return $db->query("SELECT id, name, population FROM city WHERE name LIKE ?", ["%{$search}%"])->findAll();
+}
+
+
 
 function getPaginations()
 {

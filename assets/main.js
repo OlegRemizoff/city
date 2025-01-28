@@ -83,8 +83,8 @@ divTable.addEventListener('click', (e) => {
 });
 
 // Add city
-addCityForm = document.getElementById('addCityForm');
-btnAddSubmit = document.getElementById('btn-add-submit');
+const addCityForm = document.getElementById('addCityForm');
+const btnAddSubmit = document.getElementById('btn-add-submit');
 
 addCityForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -116,8 +116,8 @@ addCityForm.addEventListener('submit', (e) => {
 
 
 // Edit city
-editCityForm = document.getElementById('editCityForm');
-btnEditSubmit = document.getElementById('btn-edit-submit');
+const editCityForm = document.getElementById('editCityForm');
+const btnEditSubmit = document.getElementById('btn-edit-submit');
 
 editCityForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -151,3 +151,44 @@ editCityForm.addEventListener('submit', (e) => {
         });
 
 });
+
+
+// Search
+const sField = document.getElementById('search');
+const loader = document.getElementById('loader');
+sField.addEventListener('input', (e) => {
+    let search = e.target.value.trim();
+    if (search.length > 2) {
+        fetch('actions.php', {
+            method: 'POST',
+            body: JSON.stringify({search: search})
+        })
+            .then((response) => response.text())
+            .then((data) => {
+                loader.style.display = 'block';
+                setTimeout(() => {
+                    divTable.innerHTML = data;
+                    let instance = new Mark(divTable);
+                    instance.mark(search);
+                    loader.style.display = 'none';
+                }, 500);
+            })
+    }
+});
+
+// Search clear
+document.getElementById('clear-search').addEventListener('click', () => {
+    sField.value = '';
+    fetch('actions.php', {
+        method: 'POST',
+        body: JSON.stringify({page: 1})
+    })
+        .then((response) => response.text())
+        .then((data) => {
+            document.querySelector('.table-responsive').innerHTML = data;
+        });
+});
+
+
+
+

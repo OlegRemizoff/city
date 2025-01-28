@@ -11,6 +11,16 @@ $db = Db::getInstance()->getConnection($config['db']);
 
 $data = json_decode(file_get_contents('php://input'), true);
 
+
+
+// Search
+if (isset($data['search'])) {
+    $search = trim($data['search']);
+    $search_cities = search_cities($search);
+    require_once 'views/search.tpl.php';
+}
+
+
 // Pagination
 if (isset($data['page'])) {
     $page = (int)$data['page'];
@@ -110,3 +120,4 @@ if (isset($data['action']) && $data['action'] == 'delete_city') {
     echo json_encode($res);
     die;
 }
+
